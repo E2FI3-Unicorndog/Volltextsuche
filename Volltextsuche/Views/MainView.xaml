@@ -15,16 +15,77 @@
         Background="Transparent" AllowsTransparency="True"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Height="450" Width="800">
+        Height="450" Width="800" ResizeMode="CanResizeWithGrip"
+        WindowStyle="None" WindowState="{Binding PWindowState}">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <materialDesign:DrawerHost Grid.RowSpan="2" HorizontalAlignment="Left" MinWidth="150" 
+                                   IsLeftDrawerOpen="{Binding PIsMenuOpen, Mode=TwoWay}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="200" Background="{StaticResource MaterialDesignColumnHeader}">
+                    <Label>Drawer Host</Label>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+        </materialDesign:DrawerHost>
+        <DockPanel Grid.ColumnSpan="2">
+            <materialDesign:ColorZone
+                    Padding="5"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                    Mode="PrimaryDark"
+                    DockPanel.Dock="Left"
+                    MouseDown="ColorZone_MouseDown">
+                <DockPanel>
+                    <ToggleButton
+                                Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                                IsChecked="{Binding PIsMenuOpen}"
+                                AutomationProperties.Name="HamburgerToggleButton"
+                                Width="Auto" Height="Auto"/>
+                    <Button
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        Command="{Binding CmdClose}"
+                        Width="Auto" Height="Auto">
+                        <materialDesign:PackIcon Kind="WindowClose" Width="Auto" Height="Auto"/>
+                    </Button>
+                    <ToggleButton
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        IsChecked="{Binding PIsMaximized, Mode=TwoWay}"
+                        ToolTip="Vollbild"
+                        Width="Auto" Height="Auto">
+                        <materialDesign:PackIcon Kind="WindowMaximize" Width="Auto" Height="Auto"/>
+                    </ToggleButton>
+                    <Button
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignIconForegroundButton}"
+                        Command="{Binding CmdMinimize}"
+                        ToolTip="Minimiere"
+                        Width="Auto" Height="Auto">
+                        <materialDesign:PackIcon Kind="WindowMinimize"  Width="Auto" Height="Auto"/>
+                    </Button>
+                </DockPanel>
+            </materialDesign:ColorZone>
+        </DockPanel>
+        <Grid Grid.Row="1" 
+              Background="LightYellow">
+
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1"
+              Background="OliveDrab">
+            
+        </Grid>
     </Grid>
 </Window>
