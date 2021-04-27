@@ -16,7 +16,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Height="450" Width="800" ResizeMode="CanResizeWithGrip"
-        WindowStyle="None" WindowState="{Binding PWindowState}">
+        WindowStyle="None" WindowState="{Binding PWindowState}" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -80,12 +80,10 @@
             </materialDesign:ColorZone>
         </DockPanel>
         <Grid Grid.Row="1" 
-              Background="LightYellow">
-
+              Background="Black">
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1"
-              Background="OliveDrab">
-            
+              Background="Black" Opacity="0.8">
         </Grid>
     </Grid>
 </Window>

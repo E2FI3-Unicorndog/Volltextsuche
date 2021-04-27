@@ -1,6 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Volltextsuche",
+    "\\Volltextsuche\\Resources",
+    "\\Volltextsuche\\Views"
   ],
+  "SelectedNode": "\\Volltextsuche.sln",
   "PreviewInSolutionExplorer": false
 }
