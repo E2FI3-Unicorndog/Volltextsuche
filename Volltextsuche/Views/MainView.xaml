@@ -7,13 +7,13 @@
         xmlns:views="clr-namespace:Volltextsuche.Views"
         xmlns:vm="clr-namespace:Volltextsuche.ViewModels"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.Foreground="WhiteSmoke"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="Transparent" AllowsTransparency="True"
         FontFamily="{DynamicResource MaterialDesignFont}"
+        Background="Transparent" AllowsTransparency="True" Foreground="WhiteSmoke"
         mc:Ignorable="d"
         Height="450" Width="800" ResizeMode="CanResizeWithGrip"
         WindowStyle="None" WindowState="{Binding PWindowState}" WindowStartupLocation="CenterScreen">
@@ -29,11 +29,13 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <materialDesign:DrawerHost Grid.RowSpan="2" HorizontalAlignment="Left" MinWidth="150" 
+        <materialDesign:DrawerHost Grid.Row="1" Grid.RowSpan="2"
+                                   HorizontalAlignment="Left"
                                    IsLeftDrawerOpen="{Binding PIsMenuOpen, Mode=TwoWay}">
             <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel MinWidth="200" Background="{StaticResource MaterialDesignColumnHeader}">
-                    <Label>Drawer Host</Label>
+                <DockPanel Background="{StaticResource MaterialDesignDarkBackground}"                           
+                           MinWidth="200">
+                    <ListBox Foreground="WhiteSmoke" ItemsSource="{Binding PDirectories}"></ListBox>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
         </materialDesign:DrawerHost>
@@ -47,8 +49,7 @@
                 <DockPanel>
                     <ToggleButton
                                 Style="{StaticResource MaterialDesignHamburgerToggleButton}"
-                                IsChecked="{Binding PIsMenuOpen}"
-                                AutomationProperties.Name="HamburgerToggleButton"
+                                IsChecked="{Binding PIsMenuOpen, Mode=TwoWay}"
                                 Width="Auto" Height="Auto"/>
                     <Button
                         DockPanel.Dock="Right"
@@ -79,11 +80,7 @@
                 </DockPanel>
             </materialDesign:ColorZone>
         </DockPanel>
-        <Grid Grid.Row="1" 
-              Background="Black">
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="1"
-              Background="Black" Opacity="0.8">
-        </Grid>
+        <Grid Grid.Row="1" Background="Black" Opacity="0.8"></Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Background="Black" Opacity="0.8"></Grid>
     </Grid>
 </Window>

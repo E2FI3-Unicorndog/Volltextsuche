@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using CommandHelper;
@@ -10,12 +11,14 @@ namespace Volltextsuche.ViewModels
     {
         #region Variables
         private bool _isMenuOpen, _isWindowMaximized;
+        private List<string> _fileMatches;
         private WindowState _windowState;
+        private string _basePath, _searchKeyword;
         #endregion
 
         #region Main
 
-        public MainViewModel(){}
+        public MainViewModel() { }
 
         private void CloseApp()
         {
@@ -67,6 +70,44 @@ namespace Volltextsuche.ViewModels
                     else PWindowState = WindowState.Normal;
                     NotifyOnPropertyChanged("PIsMaximized");
                 }
+            }
+        }
+
+        public List<string> PFileMatches
+        {
+            get { return _fileMatches; }
+            set
+            {
+                _fileMatches = value;
+                NotifyOnPropertyChanged("PFileMatches");
+            }
+        }
+
+        public string[] PDirectories
+        {
+            get
+            {
+                return Directory.GetLogicalDrives();
+            }
+        }
+
+        public string PBasePath
+        {
+            get { return _basePath; }
+            set
+            {
+                _basePath = value;
+                NotifyOnPropertyChanged("PBasePath");
+            }
+        }
+
+        public string PSearchKeyword
+        {
+            get { return _searchKeyword; }
+            set
+            {
+                _searchKeyword = value;
+                NotifyOnPropertyChanged("PSearchKeyword");
             }
         }
 
