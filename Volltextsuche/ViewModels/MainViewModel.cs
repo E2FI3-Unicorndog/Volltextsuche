@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -7,18 +9,40 @@ using CommandHelper;
 
 namespace Volltextsuche.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
         #region Variables
+
         private bool _isMenuOpen, _isWindowMaximized;
         private List<string> _fileMatches;
         private WindowState _windowState;
         private string _basePath, _searchKeyword;
+        private readonly ObservableCollection<LogicalDriveViewModel> _drives;
+
         #endregion
 
         #region Main
 
-        public MainViewModel() { }
+        public MainViewModel()
+        {
+
+            _drives = GetDrives();
+        }
+
+        private ObservableCollection<LogicalDriveViewModel> GetDrives()
+        {
+            string[] drives = Directory.GetLogicalDrives();
+            ObservableCollection<LogicalDriveViewModel> collection = new ObservableCollection<LogicalDriveViewModel>();
+            foreach (string path in drives)
+            {
+                try
+                {
+                    collection.Add(new LogicalDriveViewModel(path, Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Length));
+                }
+                catch (Exception) { }
+            }
+            return collection;
+        }
 
         private void CloseApp()
         {
@@ -32,6 +56,11 @@ namespace Volltextsuche.ViewModels
         #endregion
 
         #region Properties
+
+        public ObservableCollection<LogicalDriveViewModel> PDrives
+        {
+            get => _drives;
+        }
 
         public bool PIsMenuOpen
         {
@@ -85,10 +114,7 @@ namespace Volltextsuche.ViewModels
 
         public string[] PDirectories
         {
-            get
-            {
-                return Directory.GetLogicalDrives();
-            }
+            get { return Directory.GetLogicalDrives(); }
         }
 
         public string PBasePath
@@ -109,21 +135,6 @@ namespace Volltextsuche.ViewModels
                 _searchKeyword = value;
                 NotifyOnPropertyChanged("PSearchKeyword");
             }
-        }
-
-        #endregion
-
-        #region Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
-        #region EventHandler
-
-        private void NotifyOnPropertyChanged(string propName)
-        {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         #endregion

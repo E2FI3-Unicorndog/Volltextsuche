@@ -78,8 +78,6 @@ namespace Volltextsuche {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
         public static void Main() {
-            SplashScreen splashScreen = new SplashScreen("resources/images/unicorndog-volltextsuche.jpg");
-            splashScreen.Show(true);
             Volltextsuche.App app = new Volltextsuche.App();
             app.InitializeComponent();
             app.Run();

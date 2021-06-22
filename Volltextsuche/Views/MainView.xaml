@@ -13,7 +13,7 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Background="Transparent" AllowsTransparency="True" Foreground="WhiteSmoke"
+        Background="{x:Null}" AllowsTransparency="True" Foreground="WhiteSmoke"
         mc:Ignorable="d"
         Height="450" Width="800" ResizeMode="CanResizeWithGrip"
         WindowStyle="None" WindowState="{Binding PWindowState}" WindowStartupLocation="CenterScreen">
@@ -27,15 +27,44 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="5"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <materialDesign:DrawerHost Grid.Row="1" Grid.RowSpan="2"
-                                   HorizontalAlignment="Left"
-                                   IsLeftDrawerOpen="{Binding PIsMenuOpen, Mode=TwoWay}">
+        <Grid Background="#FF191A21" Opacity="0.6" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Grid Grid.Row="2" Background="#FF191A21" Opacity="0.99"></Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Background="#FF191A21" Opacity="0.99"></Grid>
+        <materialDesign:DrawerHost Grid.Row="2" Grid.ColumnSpan="2"
+                                   IsLeftDrawerOpen="{Binding PIsMenuOpen, Mode=TwoWay}"
+                                   OverlayBackground="Black">
             <materialDesign:DrawerHost.LeftDrawerContent>
-                <DockPanel Background="{StaticResource MaterialDesignDarkBackground}"                           
-                           MinWidth="200">
-                    <ListBox Foreground="WhiteSmoke" ItemsSource="{Binding PDirectories}"></ListBox>
+                <DockPanel Background="#FF623F6C"              
+                           Width="200">
+                    <!--<ListBox Foreground="WhiteSmoke" ItemsSource="{Binding PDirectories}"></ListBox>-->
+                    <ItemsControl ItemsSource="{Binding PDrives}"
+                                  Grid.IsSharedSizeScope="True">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:LogicalDriveViewModel}">
+                                <Border x:Name="Border" Padding="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition SharedSizeGroup="Checkerz"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox VerticalAlignment="Center"/>
+                                        <StackPanel Margin="8 0 0 0" Grid.Column="1">
+                                            <TextBlock Text="{Binding PPath}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding PCount}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <!--<DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}"/>
+                                    </DataTrigger>-->
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
         </materialDesign:DrawerHost>
@@ -80,7 +109,5 @@
                 </DockPanel>
             </materialDesign:ColorZone>
         </DockPanel>
-        <Grid Grid.Row="1" Background="Black" Opacity="0.8"></Grid>
-        <Grid Grid.Row="1" Grid.Column="1" Background="Black" Opacity="0.8"></Grid>
     </Grid>
 </Window>
