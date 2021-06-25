@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using CommandHelper;
 
 namespace Volltextsuche.ViewModels
@@ -25,9 +27,17 @@ namespace Volltextsuche.ViewModels
 
         public MainViewModel()
         {
-
             _drives = GetDrives();
+            StartFileCount();
         }
+
+        private void StartFileCount()
+        {
+            BackgroundWorker workerCountDriveFiles = new BackgroundWorker();
+            workerCountDriveFiles.DoWork += new DoWorkEventHandler(CountDriveFiles);
+            workerCountDriveFiles.RunWorkerAsync();
+        }
+
 
         private ObservableCollection<LogicalDriveViewModel> GetDrives()
         {
@@ -35,13 +45,27 @@ namespace Volltextsuche.ViewModels
             ObservableCollection<LogicalDriveViewModel> collection = new ObservableCollection<LogicalDriveViewModel>();
             foreach (string path in drives)
             {
-                try
-                {
-                    collection.Add(new LogicalDriveViewModel(path, Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Length));
-                }
-                catch (Exception) { }
+                collection.Add(new LogicalDriveViewModel(path));
             }
+
             return collection;
+        }
+
+
+        private void CountDriveFiles(object o, DoWorkEventArgs e)
+        {
+            foreach (LogicalDriveViewModel drive in PDrives)
+            {
+                string filecount = "";
+                try { filecount = Directory.GetFiles(drive.PPath, "*.*", SearchOption.AllDirectories).Length.ToString(); }
+                catch { }
+
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (filecount != "") drive.PCount = filecount;
+                    else drive.OnAccessFailed();
+                }));
+            }
         }
 
         private void CloseApp()
