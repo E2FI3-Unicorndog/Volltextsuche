@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using CommandHelper;
+using Volltextsuche.Models;
 
 namespace Volltextsuche.ViewModels
 {
@@ -27,46 +28,9 @@ namespace Volltextsuche.ViewModels
 
         public MainViewModel()
         {
-            _drives = GetDrives();
-            StartFileCount();
-        }
-
-        private void StartFileCount()
-        {
-            BackgroundWorker workerCountDriveFiles = new BackgroundWorker();
-            workerCountDriveFiles.DoWork += new DoWorkEventHandler(CountDriveFiles);
-            workerCountDriveFiles.RunWorkerAsync();
-        }
-
-
-        private ObservableCollection<LogicalDriveViewModel> GetDrives()
-        {
-            string[] drives = Directory.GetLogicalDrives();
-            ObservableCollection<LogicalDriveViewModel> collection = new ObservableCollection<LogicalDriveViewModel>();
-            foreach (string path in drives)
-            {
-                collection.Add(new LogicalDriveViewModel(path));
-            }
-
-            return collection;
-        }
-
-
-        private void CountDriveFiles(object o, DoWorkEventArgs e)
-        {
-            foreach (LogicalDriveViewModel drive in PDrives)
-            {
-                string filecount = "";
-                try { filecount = Directory.GetFiles(drive.PPath, "*.*", SearchOption.AllDirectories).Length.ToString(); }
-                catch { }
-
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (filecount != "") drive.PCount = filecount;
-                    else drive.OnAccessFailed();
-                }));
-            }
-        }
+            _drives = DriveHandler.GetLogicalDrives();
+            DriveHandler.StartFileCount(PDrives);
+        }        
 
         private void CloseApp()
         {

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Volltextsuche.Models;
 
 namespace Volltextsuche.ViewModels
 {
@@ -11,9 +15,10 @@ namespace Volltextsuche.ViewModels
     {
         #region Variables
 
-        private bool _isSelected;
+        private bool _isSelected, _isExpanded;
         private readonly string _path;
         private int _count = -1;
+        private ObservableCollection<LogicalDriveViewModel> _drives;
 
         #endregion
 
@@ -24,10 +29,48 @@ namespace Volltextsuche.ViewModels
 
         #region Properties
 
+        public ObservableCollection<LogicalDriveViewModel> PSubdrives
+        {
+            get => _drives;
+            set
+            {
+                _drives = value;
+                NotifyOnPropertyChanged("PSubdrives");
+            }
+        }
+
         public bool PIsSelected
         {
             get => _isSelected;
-            set => _isSelected = value;
+            set
+            {
+                _isSelected = value;
+                //if (PSubdrives == null)
+                //{
+                //    PSubdrives = DriveHandler.GetDrives(PPath);
+                //    DriveHandler.StartFileCount(PSubdrives);
+                //}
+                //foreach (LogicalDriveViewModel drive in PSubdrives)
+                //{
+                //    drive.PIsSelected = PIsSelected;
+                //}
+                NotifyOnPropertyChanged("PIsSelected");
+            }
+        }
+
+        public bool PIsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                _isExpanded = value;
+                if (PSubdrives == null)
+                {
+                    PSubdrives = DriveHandler.GetDrives(PPath);
+                    DriveHandler.StartFileCount(PSubdrives);
+                }
+                NotifyOnPropertyChanged("PIsExpanded");
+            }
         }
 
         public void OnAccessFailed()

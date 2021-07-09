@@ -90,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\DriveHandler.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\LogicalDriveViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
@@ -142,7 +143,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Views\Animations\" />
     <Folder Include="Views\Controls\" />
     <Folder Include="Views\Converters\" />

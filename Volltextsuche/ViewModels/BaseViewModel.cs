@@ -13,7 +13,7 @@ namespace Volltextsuche.ViewModels
 
         protected void NotifyOnPropertyChanged(string propName)
         {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
     }
