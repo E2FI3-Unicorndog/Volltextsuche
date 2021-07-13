@@ -15,7 +15,8 @@ namespace Volltextsuche.ViewModels
     {
         #region Variables
 
-        private bool _isSelected, _isExpanded;
+        private bool _isSelected, _isExpanded, _isEnabled;
+        private bool _isParentSelected = false;
         private readonly string _path;
         private int _count = -1;
         private ObservableCollection<LogicalDriveViewModel> _drives;
@@ -25,6 +26,11 @@ namespace Volltextsuche.ViewModels
         public LogicalDriveViewModel(string name)
         {
             _path = name;
+        }
+
+        public LogicalDriveViewModel(string name, bool isParentSelected) : this(name)
+        {
+            _isParentSelected = isParentSelected;
         }
 
         #region Properties
@@ -45,16 +51,38 @@ namespace Volltextsuche.ViewModels
             set
             {
                 _isSelected = value;
-                //if (PSubdrives == null)
-                //{
-                //    PSubdrives = DriveHandler.GetDrives(PPath);
-                //    DriveHandler.StartFileCount(PSubdrives);
-                //}
-                //foreach (LogicalDriveViewModel drive in PSubdrives)
-                //{
-                //    drive.PIsSelected = PIsSelected;
-                //}
+                if (PSubdrives != null)
+                {
+                    foreach (LogicalDriveViewModel subdrive in PSubdrives)
+                    {
+                        subdrive.PIsParentSelected = value;
+                    }
+                }
                 NotifyOnPropertyChanged("PIsSelected");
+            }
+        }
+
+        public bool PIsEnabled
+        {
+            get {
+                if (_isParentSelected) return false;
+                else if (_count > 0) return _isEnabled;
+                else return false;
+            }
+            set
+            {
+                _isEnabled = value;
+                NotifyOnPropertyChanged("PIsEnabled");
+            }
+        }
+
+        public bool PIsParentSelected
+        {
+            get => _isParentSelected;
+            set
+            {
+                _isParentSelected = value;
+                NotifyOnPropertyChanged("PIsEnabled");
             }
         }
 
@@ -66,7 +94,7 @@ namespace Volltextsuche.ViewModels
                 _isExpanded = value;
                 if (PSubdrives == null)
                 {
-                    PSubdrives = DriveHandler.GetDrives(PPath);
+                    PSubdrives = DriveHandler.GetDrives(PPath, true, PIsSelected);
                     DriveHandler.StartFileCount(PSubdrives);
                 }
                 NotifyOnPropertyChanged("PIsExpanded");
@@ -97,6 +125,7 @@ namespace Volltextsuche.ViewModels
                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
                     NotifyOnPropertyChanged("PCount");
+                    PIsEnabled = _count > 0;
                 }));
             }
         }

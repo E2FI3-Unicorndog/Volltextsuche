@@ -57,7 +57,9 @@
                                                         <ColumnDefinition SharedSizeGroup="Checkerz"/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
-                                                    <CheckBox VerticalAlignment="Top" IsChecked="{Binding PIsSelected}"/>
+                                                    <CheckBox VerticalAlignment="Top" 
+                                                              IsChecked="{Binding PIsSelected}"
+                                                              IsEnabled="{Binding PIsEnabled}"/>
                                                     <StackPanel Margin="8 0 0 0" Grid.Column="1">
                                                         <TextBlock Text="{Binding PPath}" FontWeight="Bold"/>
                                                         <TextBlock Text="{Binding PCount}" HorizontalAlignment="Stretch"/>

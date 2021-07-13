@@ -20,7 +20,7 @@ namespace Volltextsuche.Models
             workerCountDriveFiles.RunWorkerAsync(subdrives);
         }
 
-        public static ObservableCollection<LogicalDriveViewModel> GetDrives(string mainPath)
+        public static ObservableCollection<LogicalDriveViewModel> GetDrives(string mainPath, bool hasParent = false, bool isParentSelected = false)
         {
             string[] drives;
             ObservableCollection<LogicalDriveViewModel> collection = new ObservableCollection<LogicalDriveViewModel>(); ;
@@ -31,7 +31,8 @@ namespace Volltextsuche.Models
                 {
                     foreach (string path in drives)
                     {
-                        collection.Add(new LogicalDriveViewModel(path));
+                        if (!hasParent) collection.Add(new LogicalDriveViewModel(path));
+                        else collection.Add(new LogicalDriveViewModel(path, isParentSelected));
                     }
                 }
             }
