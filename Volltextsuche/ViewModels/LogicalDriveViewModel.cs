@@ -15,13 +15,14 @@ namespace Volltextsuche.ViewModels
     {
         #region Variables
 
-        private bool _isSelected, _isExpanded, _isEnabled;
-        private bool _isParentSelected = false;
+        private bool _isSelected, _isExpanded, _isEnabled,_isParentSelected = false, _isOtherPathSelected = false;
         private readonly string _path;
         private int _count = -1;
         private ObservableCollection<LogicalDriveViewModel> _drives;
 
         #endregion
+
+        #region Main
 
         public LogicalDriveViewModel(string name)
         {
@@ -32,6 +33,8 @@ namespace Volltextsuche.ViewModels
         {
             _isParentSelected = isParentSelected;
         }
+
+        #endregion
 
         #region Properties
 
@@ -58,6 +61,7 @@ namespace Volltextsuche.ViewModels
                         subdrive.PIsParentSelected = value;
                     }
                 }
+                PathSelectedChanged?.Invoke(this);
                 NotifyOnPropertyChanged("PIsSelected");
             }
         }
@@ -65,13 +69,24 @@ namespace Volltextsuche.ViewModels
         public bool PIsEnabled
         {
             get {
-                if (_isParentSelected) return false;
+                if (_isParentSelected || (_isOtherPathSelected && !_isSelected)) return false;
                 else if (_count > 0) return _isEnabled;
                 else return false;
             }
             set
             {
                 _isEnabled = value;
+                NotifyOnPropertyChanged("PIsEnabled");
+            }
+        }
+
+        public bool PIsOtherPathSelected
+        {
+            get => _isOtherPathSelected;
+            set
+            {
+                _isOtherPathSelected = value;
+                NotifyOnPropertyChanged("PIsOtherPathSelected");
                 NotifyOnPropertyChanged("PIsEnabled");
             }
         }
@@ -95,6 +110,7 @@ namespace Volltextsuche.ViewModels
                 if (PSubdrives == null)
                 {
                     PSubdrives = DriveHandler.GetDrives(PPath, true, PIsSelected);
+                    SubdrivesLoaded?.Invoke(this);
                     DriveHandler.StartFileCount(PSubdrives);
                 }
                 NotifyOnPropertyChanged("PIsExpanded");
@@ -129,6 +145,13 @@ namespace Volltextsuche.ViewModels
                 }));
             }
         }
+
+        #endregion
+
+        #region Events
+
+        public event PathSelectedChangedEventHandler PathSelectedChanged;
+        public event SubdrivesLoadedEventHandler SubdrivesLoaded;
 
         #endregion
 

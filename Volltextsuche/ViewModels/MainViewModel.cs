@@ -19,8 +19,9 @@ namespace Volltextsuche.ViewModels
         private bool _isMenuOpen, _isWindowMaximized;
         private List<string> _fileMatches;
         private WindowState _windowState;
-        private string _basePath, _searchKeyword;
+        private string _searchKeyword;
         private readonly ObservableCollection<LogicalDriveViewModel> _drives;
+        public LogicalDriveViewModel _searchPath;
 
         #endregion
 
@@ -29,8 +30,50 @@ namespace Volltextsuche.ViewModels
         public MainViewModel()
         {
             _drives = DriveHandler.GetLogicalDrives();
+            InitDrives();
+        }
+
+        private void InitDrives()
+        {
+            foreach (LogicalDriveViewModel drive in PDrives)
+            {
+                drive.SubdrivesLoaded += Register4DriveEvents;
+                drive.PathSelectedChanged += SetSelectedPath;
+            }
             DriveHandler.StartFileCount(PDrives);
-        }        
+        }
+
+        private void Register4DriveEvents(LogicalDriveViewModel drive)
+        {
+            foreach (LogicalDriveViewModel subdrive in drive.PSubdrives)
+            {
+                subdrive.SubdrivesLoaded += Register4DriveEvents;
+                subdrive.PathSelectedChanged += SetSelectedPath;
+            }
+        }
+
+        private void SetSelectedPath(LogicalDriveViewModel drive)
+        {
+            if (drive.PIsSelected)
+            {
+                PSearchPath = drive;
+                EnableDrivesRecursive(false, PDrives);
+            }
+            else
+            {
+                PSearchPath = null;
+                EnableDrivesRecursive(true, PDrives);
+            }
+        }
+
+        private void EnableDrivesRecursive(bool enable, ObservableCollection<LogicalDriveViewModel> driveCollection)
+        {
+            foreach (LogicalDriveViewModel drive in driveCollection)
+            {
+                drive.PIsOtherPathSelected = !enable;
+                if (drive.PSubdrives != null) EnableDrivesRecursive(enable, drive.PSubdrives);
+            }
+        }
 
         private void CloseApp()
         {
@@ -105,13 +148,13 @@ namespace Volltextsuche.ViewModels
             get { return Directory.GetLogicalDrives(); }
         }
 
-        public string PBasePath
+        public LogicalDriveViewModel PSearchPath
         {
-            get { return _basePath; }
+            get { return _searchPath; }
             set
             {
-                _basePath = value;
-                NotifyOnPropertyChanged("PBasePath");
+                _searchPath = value;
+                NotifyOnPropertyChanged("PSearchPath");
             }
         }
 

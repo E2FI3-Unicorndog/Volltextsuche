@@ -39,12 +39,24 @@
             <DockPanel>
                 <Label Content="Durchsuche Verzeichnis"
                        Margin="10 10 10 5" DockPanel.Dock="Top"/>
-                <materialDesign:Card Content="C:\Program Files\Testverzeichnis" 
-                                     Margin="10 0" DockPanel.Dock="Top" Padding="10" IsEnabled="False"/>
+                <materialDesign:Card Content="{Binding PSearchPath.PPath}" 
+                                     Margin="10 0" DockPanel.Dock="Top" Padding="10" IsEnabled="False" Height="30"/>
                 <Label Content="Suchbegriff"
                        Margin="10 10 10 5" DockPanel.Dock="Top"/>
-                <TextBox Text="Testbegriff" Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                         Margin="10 0" DockPanel.Dock="Top" Height="40" VerticalAlignment="Top"/>
+                <DockPanel Margin="10 0" DockPanel.Dock="Top" VerticalAlignment="Top">
+                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            DockPanel.Dock="Right" Margin="30 0 20 0"
+                            ToolTip="Starte Volltextsuche">
+                        <materialDesign:PackIcon Kind="Play"/>
+                    </Button>
+                    <TextBox Text="{Binding PSearchKeyword}" 
+                             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                             Height="40"/>
+                </DockPanel>
+            </DockPanel>
+            <DockPanel Grid.Row="1">
+                <Label Content="Ergebnis"
+                       Margin="10 10 10 5" DockPanel.Dock="Top"/>
             </DockPanel>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1" Background="#FF191A21" Opacity="0.99">
