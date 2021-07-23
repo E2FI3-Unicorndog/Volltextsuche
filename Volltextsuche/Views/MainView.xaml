@@ -45,9 +45,24 @@
                        Margin="10 10 10 5" DockPanel.Dock="Top"/>
                 <DockPanel Margin="10 0" DockPanel.Dock="Top" VerticalAlignment="Top">
                     <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding PIsSearching}"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="{Binding PIsSearching}"
                             DockPanel.Dock="Right" Margin="30 0 20 0"
+                            Command="{Binding CmdSearch}"
                             ToolTip="Starte Volltextsuche">
-                        <materialDesign:PackIcon Kind="Play"/>
+                        <materialDesign:PackIcon>
+                            <materialDesign:PackIcon.Style>
+                                <Style TargetType="materialDesign:PackIcon"
+                                       BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}">
+                                    <Setter Property="Kind" Value="Search" />  
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PResultsReady}" Value="True">
+                                            <Setter Property="Kind" Value="Check"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </materialDesign:PackIcon.Style>
+                        </materialDesign:PackIcon>
                     </Button>
                     <TextBox Text="{Binding PSearchKeyword}" 
                              Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"

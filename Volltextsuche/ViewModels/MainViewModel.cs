@@ -16,7 +16,7 @@ namespace Volltextsuche.ViewModels
     {
         #region Variables
 
-        private bool _isMenuOpen, _isWindowMaximized;
+        private bool _isMenuOpen, _isWindowMaximized, _resultsReady, _isSearching;
         private List<string> _fileMatches;
         private WindowState _windowState;
         private string _searchKeyword;
@@ -84,6 +84,12 @@ namespace Volltextsuche.ViewModels
         {
             PWindowState = WindowState.Minimized;
         }
+
+        private void StartFulltextSearch()
+        {
+            PIsSearching = true;
+        }
+
         #endregion
 
         #region Properties
@@ -150,7 +156,7 @@ namespace Volltextsuche.ViewModels
 
         public LogicalDriveViewModel PSearchPath
         {
-            get { return _searchPath; }
+            get => _searchPath;
             set
             {
                 _searchPath = value;
@@ -160,11 +166,31 @@ namespace Volltextsuche.ViewModels
 
         public string PSearchKeyword
         {
-            get { return _searchKeyword; }
+            get => _searchKeyword;
             set
             {
                 _searchKeyword = value;
                 NotifyOnPropertyChanged("PSearchKeyword");
+            }
+        }
+
+        public bool PResultsReady
+        {
+            get => _resultsReady;
+            set
+            {
+                _resultsReady = value;
+                NotifyOnPropertyChanged("PResultsReady");
+            }
+        }
+
+        public bool PIsSearching
+        {
+            get => _isSearching;
+            set
+            {
+                _isSearching = value;
+                NotifyOnPropertyChanged("PIsSearching");
             }
         }
 
@@ -174,18 +200,17 @@ namespace Volltextsuche.ViewModels
 
         public ICommand CmdClose
         {
-            get
-            {
-                return new RelayCommand(o => CloseApp());
-            }
+            get => new RelayCommand(o => CloseApp());         
         }
 
         public ICommand CmdMinimize
         {
-            get
-            {
-                return new RelayCommand(o => MinimizeWindow());
-            }
+            get => new RelayCommand(o => MinimizeWindow());          
+        }
+
+        public ICommand CmdSearch
+        {
+            get => new RelayCommand(o => StartFulltextSearch());
         }
 
         #endregion
