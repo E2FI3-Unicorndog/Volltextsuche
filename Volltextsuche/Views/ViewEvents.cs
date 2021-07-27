@@ -7,4 +7,9 @@ using System.Windows;
 
 namespace Volltextsuche.Views
 {
+
+    public class Test
+    {
+    }
+
 }

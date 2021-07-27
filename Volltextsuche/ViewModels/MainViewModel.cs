@@ -87,7 +87,7 @@ namespace Volltextsuche.ViewModels
 
         private void StartFulltextSearch()
         {
-            PIsSearching = true;
+            PIsSearching = !PIsSearching;
         }
 
         #endregion

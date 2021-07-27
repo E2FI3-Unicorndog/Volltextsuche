@@ -52,8 +52,7 @@
                             ToolTip="Starte Volltextsuche">
                         <materialDesign:PackIcon>
                             <materialDesign:PackIcon.Style>
-                                <Style TargetType="materialDesign:PackIcon"
-                                       BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}">
+                                <Style TargetType="materialDesign:PackIcon">
                                     <Setter Property="Kind" Value="Search" />  
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding PResultsReady}" Value="True">
