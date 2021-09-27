@@ -12,12 +12,12 @@ namespace Dienst
         /// <summary>
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
-        static void Main()
+        static void Main(String[] args)
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new NewService()
+                new NewService(args)
             };
             ServiceBase.Run(ServicesToRun);
         }
